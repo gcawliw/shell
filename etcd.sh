@@ -46,7 +46,7 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl systemctl enable etcd.service
+systemctl enable etcd.service
 #systemctl start etcd.service
 #/db/etcd/etcdctl endpoint status --cluster --write-out=table
 echo "ETCD配置文件：/etc/etcd/etcd.yml"
