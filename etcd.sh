@@ -4,11 +4,12 @@ mkdir -p /db/
 mkdir -p /etc/etcd
 cd /db/
 useradd -d /home/etcd -s /bin/bash etcd
-chown -R etcd /db/etcd
+
 etcd_ver="$(wget --no-check-certificate -qO- https://api.github.com/repos/etcd-io/etcd/releases | grep "tag_name" | head -1 | awk -F '": "' '{print $2}' |cut -d\" -f1)"
 wget https://github.com/etcd-io/etcd/releases/download/${etcd_ver}/etcd-${etcd_ver}-linux-amd64.tar.gz
 tar -zvxf etcd-${etcd_ver}-linux-amd64.tar.gz && rm -f etcd-${etcd_ver}-linux-amd64.tar.gz
 mv etcd-${etcd_ver}-linux-amd64/ etcd/
+chown -R etcd /db/etcd
 
 read -p "请输入ETCD监听地址:" etcd_host
 
