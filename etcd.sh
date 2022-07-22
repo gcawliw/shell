@@ -19,7 +19,7 @@ initial-advertise-peer-urls: http://${etcd_host}:2380
 data-dir: /db/etcd/etcd.cluster.node01
 listen-peer-urls: http://${etcd_host}:2380
 listen-client-urls: http://${etcd_host}:2379,http://127.0.0.1:2379
-advertise-client-url: http://${etcd_host}:2379
+advertise-client-urls: http://${etcd_host}:2379
 initial-cluster-token: etcd.cluster
 initial-cluster: etcd.cluster.node01=http://${etcd_host}:2380
 auto-compaction-retention: '1'
