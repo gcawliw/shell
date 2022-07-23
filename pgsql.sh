@@ -113,3 +113,4 @@ systemctl enable etcd.service
 }
 
 install_pgsql
+install_patroni
