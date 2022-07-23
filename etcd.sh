@@ -6,10 +6,15 @@ cd /db/
 sudo groupadd -r etcd
 sudo useradd -r -g etcd -d /db/etcd/ -s /bin/false etcd
 
-etcd_ver="$(wget --no-check-certificate -qO- https://api.github.com/repos/etcd-io/etcd/releases | grep "tag_name" | head -1 | awk -F '": "' '{print $2}' |cut -d\" -f1)"
-wget https://github.com/etcd-io/etcd/releases/download/${etcd_ver}/etcd-${etcd_ver}-linux-amd64.tar.gz
-tar -zvxf etcd-${etcd_ver}-linux-amd64.tar.gz && rm -f etcd-${etcd_ver}-linux-amd64.tar.gz
-mv etcd-${etcd_ver}-linux-amd64/ etcd/
+#etcd_ver="$(wget --no-check-certificate -qO- https://api.github.com/repos/etcd-io/etcd/releases | grep "tag_name" | head -1 | awk -F '": "' '{print $2}' |cut -d\" -f1)"
+#wget https://github.com/etcd-io/etcd/releases/download/${etcd_ver}/etcd-${etcd_ver}-linux-amd64.tar.gz
+#tar -zvxf etcd-${etcd_ver}-linux-amd64.tar.gz && rm -f etcd-${etcd_ver}-linux-amd64.tar.gz
+#mv etcd-${etcd_ver}-linux-amd64/ etcd/
+
+wget https://github.com/etcd-io/etcd/releases/download/v3.5.4/etcd-v3.5.4-linux-amd64.tar.gz
+tar -zvxf etcd-v3.5.4-linux-amd64.tar.gz && rm -f etcd-v3.5.4-linux-amd64.tar.gz
+mv etcd-v3.5.4-linux-amd64/ etcd/
+
 chown -R etcd /db/etcd
 cp /db/etcd/etcd /usr/bin
 cp /db/etcd/etcdctl /usr/bin
