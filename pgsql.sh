@@ -114,8 +114,8 @@ systemctl enable patroni.service
 
 ###pgpass文件
 #cat > /var/lib/postgresql << EOF
-#pgsql_host:5432:*:postgres:${postgres_PW}
-#pgsql_host:5432:*:replicator:${replicator_PW}
+#pgsql_host:*:*:postgres:${postgres_PW}
+#pgsql_host:*:*:replicator:${replicator_PW}
 #EOF
 ###
 }
