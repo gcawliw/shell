@@ -109,7 +109,7 @@ Restart=no
 WantedBy=multi-user.target
 EOF
 systemctl daemon-reload
-systemctl enable etcd.service
+systemctl enable patroni.service
 }
 
 install_pgsql
