@@ -12,20 +12,33 @@ systemctl stop postgresql
 install_patroni() {
 apt -y install python3-pip python3-setuptools python3-dev python3-wheel gcc libpq-dev python3-psycopg2
 pip3 install patroni[etcd3]
+mkdir /etc/patroni/
+mkdir -p /db/pgsql/data
+chown -R postgres /db/pgsql
+
+read -p "请输入PGSQL节点名称(集群中不可重复):" pgsq_name
+read -p "请输入PGSQL监听地址（本机IP）:" pgsql_host
+read -p "请输入PGSQL数据库postgres用户密码:" postgres_PW
+read -p "请输入PGSQL数据库replicator用户密码:" replicator_PW
+read -p "请输入ETCD1节点的IP地址:" etcd1_ip
+read -p "请输入ETCD2节点的IP地址:" etcd2_ip
+read -p "请输入ETCD3节点的IP地址:" etcd3_ip
+
+
 
 cat > /etc/patroni/patroni.yml << EOF
 scope: pg
 namespace: /service/
-name: postgresql01
+name: ${pgsq_name}
 
 restapi:
-    listen: 127.0.0.1:8008
-    connect_address: 127.0.0.1:8008
+    listen: ${pgsql_host}:8008
+    connect_address: ${pgsql_host}:8008
 
 etcd3:
-    host: :2379
-    host: :2379
-    host: :2379
+    host: ${etcd1_ip}:2379
+    host: ${etcd2_ip}:2379
+    host: ${etcd3_ip}:2379
 
 bootstrap:
     dcs:
@@ -52,18 +65,18 @@ bootstrap:
                 - createdb
 
 postgresql:
-    listen: 127.0.0.1:5432
-    connect_address: 127.0.0.1:5432
+    listen: ${pgsql_host}:5432
+    connect_address: ${pgsql_host}:5432
     data_dir: /db/pgsql/data
-    bin_dir: /usr/lib/postgresql/10/bin
+    bin_dir: /usr/lib/postgresql/13/bin
     pgpass: /tmp/pgpass01
     authentication:
         replication:
             username: replicator
-            password: 
+            password: ${replicator_PW}
         superuser:
             username: postgres
-            password: 
+            password: ${postgres_PW}
    parameters:
         unix_socket_directories: '.'
 
@@ -72,6 +85,31 @@ tags:
     noloadbalance: false
     clonefrom: false
 EOF
+
+
+
+cat > /lib/systemd/system/patroni.service << EOF
+[Unit]
+Description=Runners to orchestrate a high-availability PostgreSQL
+After=syslog.target network.target
+
+[Service]
+Type=simple
+
+User=postgres
+Group=postgres
+
+# StandardOutput=syslog
+ExecStart=/usr/local/bin/patroni /etc/patroni/patroni.yml
+KillMode=process
+TimeoutSec=30
+Restart=no
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable etcd.service
 }
 
 install_pgsql
