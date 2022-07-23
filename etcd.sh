@@ -24,7 +24,7 @@ listen-peer-urls: http://${etcd_host}:2380
 listen-client-urls: http://${etcd_host}:2379,http://127.0.0.1:2379
 advertise-client-urls: http://${etcd_host}:2379
 initial-cluster-token: etcd.cluster
-initial-cluster: etcd.cluster.node01=http://${etcd_host}:2380,etcd.cluster.node02=http://${etcd_host}:2380,etcd.cluster.node01=http://${etcd_host}:2380
+initial-cluster: etcd.cluster.node01=http://${etcd_host}:2380,etcd.cluster.node02=http://${etcd_host}:2380,etcd.cluster.node03=http://${etcd_host}:2380
 auto-compaction-retention: '1'
 quota-backend-bytes: 8589934592
 initial-cluster-state: new
