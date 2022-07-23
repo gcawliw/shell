@@ -73,3 +73,4 @@ tags:
 EOF
 }
 
+install_pgsql
