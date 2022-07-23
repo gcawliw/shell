@@ -77,7 +77,7 @@ postgresql:
         superuser:
             username: postgres
             password: ${postgres_PW}
-   parameters:
+    parameters:
         unix_socket_directories: '.'
 
 tags:
