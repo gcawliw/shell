@@ -3,7 +3,8 @@ install_etcd() {
 mkdir -p /db/
 mkdir -p /etc/etcd
 cd /db/
-useradd -d /home/etcd -s /bin/bash etcd
+sudo groupadd -r etcd
+sudo useradd -r -g etcd -d /db/etcd/ -s /bin/false etcd
 
 etcd_ver="$(wget --no-check-certificate -qO- https://api.github.com/repos/etcd-io/etcd/releases | grep "tag_name" | head -1 | awk -F '": "' '{print $2}' |cut -d\" -f1)"
 wget https://github.com/etcd-io/etcd/releases/download/${etcd_ver}/etcd-${etcd_ver}-linux-amd64.tar.gz
@@ -21,7 +22,7 @@ listen-peer-urls: http://${etcd_host}:2380
 listen-client-urls: http://${etcd_host}:2379,http://127.0.0.1:2379
 advertise-client-urls: http://${etcd_host}:2379
 initial-cluster-token: etcd.cluster
-initial-cluster: etcd.cluster.node01=http://${etcd_host}:2380
+initial-cluster: etcd.cluster.node01=http://${etcd_host}:2380,etcd.cluster.node02=http://${etcd_host}:2380,etcd.cluster.node01=http://${etcd_host}:2380
 auto-compaction-retention: '1'
 quota-backend-bytes: 8589934592
 initial-cluster-state: new
