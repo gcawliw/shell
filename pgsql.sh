@@ -16,6 +16,7 @@ mkdir /etc/patroni/
 mkdir -p /db/pgsql/data
 chown -R postgres /db/pgsql
 
+###
 read -p "请输入PGSQL节点名称(集群中不可重复):" pgsq_name
 read -p "请输入PGSQL监听地址（本机IP）:" pgsql_host
 read -p "请输入PGSQL数据库postgres用户密码:" postgres_PW
@@ -23,9 +24,9 @@ read -p "请输入PGSQL数据库replicator用户密码:" replicator_PW
 read -p "请输入ETCD1节点的IP地址:" etcd1_ip
 read -p "请输入ETCD2节点的IP地址:" etcd2_ip
 read -p "请输入ETCD3节点的IP地址:" etcd3_ip
+###
 
-
-
+###patroni配置文件
 cat > /etc/patroni/patroni.yml << EOF
 scope: pg
 namespace: /service/
@@ -85,9 +86,9 @@ tags:
     noloadbalance: false
     clonefrom: false
 EOF
+###
 
-
-
+###服务配置文件
 cat > /lib/systemd/system/patroni.service << EOF
 [Unit]
 Description=Runners to orchestrate a high-availability PostgreSQL
@@ -99,7 +100,6 @@ Type=simple
 User=postgres
 Group=postgres
 
-# StandardOutput=syslog
 ExecStart=/usr/local/bin/patroni /etc/patroni/patroni.yml
 KillMode=process
 TimeoutSec=30
@@ -110,6 +110,14 @@ WantedBy=multi-user.target
 EOF
 systemctl daemon-reload
 systemctl enable patroni.service
+###
+
+###pgpass文件
+#cat > /var/lib/postgresql << EOF
+#pgsql_host:5432:*:postgres:${postgres_PW}
+#pgsql_host:5432:*:replicator:${replicator_PW}
+#EOF
+###
 }
 
 install_pgsql
