@@ -5,6 +5,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key a
 apt update && apt -y install postgresql-13
 systemctl disable postgresql
 systemctl stop postgresql
+}
 ###
 
 ###install Patroni
