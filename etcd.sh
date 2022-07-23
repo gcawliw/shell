@@ -11,6 +11,8 @@ wget https://github.com/etcd-io/etcd/releases/download/${etcd_ver}/etcd-${etcd_v
 tar -zvxf etcd-${etcd_ver}-linux-amd64.tar.gz && rm -f etcd-${etcd_ver}-linux-amd64.tar.gz
 mv etcd-${etcd_ver}-linux-amd64/ etcd/
 chown -R etcd /db/etcd
+cp /db/etcd/etcd /usr/bin
+cp /db/etcd/etcdctl /usr/bin
 
 read -p "请输入ETCD监听地址:" etcd_host
 
